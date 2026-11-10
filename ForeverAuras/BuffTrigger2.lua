@@ -2030,6 +2030,11 @@ do
               local isHelpful = not C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, aura.auraInstanceID, "HELPFUL")
               local isHarmful = not C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, aura.auraInstanceID, "HARMFUL")
               if (isHelpful and filter == "HELPFUL") or (isHarmful and filter == "HARMFUL") then
+                -- ForeverAuras: while auras are secret the event's copy hides the spell id, but the aura can still be
+                -- read by its instance id, as updated auras are below.
+                if issecretvalue(aura.spellId) then
+                  aura = C_UnitAuras.GetAuraDataByAuraInstanceID(unit, aura.auraInstanceID)
+                end
                 HandleAura(aura)
               end
             end
